@@ -1,6 +1,9 @@
-[![PyPI](https://badge.fury.io/py/slackbot.svg)](https://pypi.python.org/pypi/slackbot) [![Build Status](https://secure.travis-ci.org/lins05/slackbot.svg?branch=master)](http://travis-ci.org/lins05/slackbot)
+[![PyPI](https://badge.fury.io/py/slackbot.svg)](https://pypi.python.org/pypi/slackbotng) 
+[![Build Status](https://secure.travis-ci.org/amuraru/slackbotng.svg?branch=devel)](http://travis-ci.org/amuraru/slackbotng)
 
-A chat bot for [Slack](https://slack.com) inspired by [llimllib/limbo](https://github.com/llimllib/limbo) and [will](https://github.com/skoczen/will).
+A chat bot for [Slack](https://slack.com) inspired by [llimllib/limbo](https://github.com/llimllib/limbo) and [will](https://github.com/skoczen/will).  
+This is a fork of [lins05/slackbot](https://github.com/lins05/slackbot) with the package name being renamed to `slackbotng` due to the lack of the activity from the original author.
+All credits go to `Shuai Lin` for the initial implementation.
 
 ## Features
 
@@ -15,7 +18,7 @@ A chat bot for [Slack](https://slack.com) inspired by [llimllib/limbo](https://g
 
 
 ```
-pip install slackbot
+pip install slackbotng
 ```
 
 ## Usage

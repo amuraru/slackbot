@@ -15,13 +15,13 @@ excludes = (
     '*local_settings*',
 ) # yapf: disable
 
-setup(name='slackbot',
+setup(name='slackbotng',
       version=__version__,
       license='MIT',
       description='A simple chat bot for Slack',
-      author='Shuai Lin',
-      author_email='linshuai2012@gmail.com',
-      url='http://github.com/lins05/slackbot',
+      author='Adrian Muraru',
+      author_email='adi.muraru@gmail.com',
+      url='http://github.com/amuraru/slackbot',
       platforms=['Any'],
       packages=find_packages(exclude=excludes),
       install_requires=install_requires,
