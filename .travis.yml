@@ -24,4 +24,4 @@ deploy:
     secure: d+RIBeI8E66mLPZan5vgEYR5P4K+J8YfcAJR16MFVuoKkvMaCze+Ho5bFgUzN47wW+SzAjFixPI4fkB4Silk+7BCwMeQrBQq+CL9OYCZf2vPwl2K3QTScwVCreEF05u3V1x5lm3/UvzTAuz0knaXwrWelRm5DOVf3DZPjWEcXtA=
   on:
     tags: true
-    repo: lins05/slackbot
+    repo: amuraru/slackbot
