@@ -20,7 +20,7 @@ class PluginsManager(object):
         'listen_to': {},
         'default_reply': {},
     }
-    idle_commands = []
+    run_at_times_commands = []
 
     def init_plugins(self):
         if hasattr(settings, 'PLUGINS'):
@@ -76,6 +76,6 @@ class PluginsManager(object):
         if not has_matching_plugin:
             yield None, None
 
-    def get_idle_plugins(self):
-        for c in self.idle_commands:
+    def get_run_at_times_plugins(self):
+        for c in self.run_at_times_commands:
             yield c

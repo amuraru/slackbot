@@ -11,7 +11,6 @@ from slackbot import settings
 from slackbot.manager import PluginsManager
 from slackbot.slackclient import SlackClient
 from slackbot.dispatcher import MessageDispatcher
-from slackbot.utils import optional_arg_decorator
 
 logger = logging.getLogger(__name__)
 
@@ -70,15 +69,26 @@ def listen_to(matchstr, flags=0):
     return wrapper
 
 
-# use optional_arg_decorator so users can either do @idle or @idle()
-@optional_arg_decorator
-def idle(func):
-    """Run a function once/second whenever no other actions were taken.
-    The function must take one parameter, a SlackClient instance."""
-    # match anything, the text doesn't apply for "idle"
-    PluginsManager.idle_commands.append(func)
-    logger.info('registered idle plugin "%s"', func.__name__)
-    return func
+def run_at_times(**kwargs):
+    """
+    Decorator to run a function once a given number of seconds.
+    Takes run_once_at int parameter in seconds.
+    The decorated function must take one parameter, a SlackClient instance.
+    """
+    if kwargs:
+        if 'run_once_at' in kwargs:
+            run_once_at = kwargs['run_once_at']
+        else:
+            # default to 60s if no run_on_once is given
+            run_once_at = 60
+
+    def wrapper(func):
+        func.last_run = None
+        func.run_once_at = run_once_at
+        PluginsManager.run_at_times_commands.append(func)
+        logger.info('registered run at given times plugin "%s"', func.__name__)
+        return func
+    return wrapper
 
 
 # def default_reply(matchstr=r'^.*$', flags=0):

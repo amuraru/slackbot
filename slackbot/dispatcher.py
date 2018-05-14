@@ -40,11 +40,23 @@ class MessageDispatcher(object):
 
     def dispatch_msg(self, msg):
         category = msg[0]
-        msg = msg[1]
-        if not self._dispatch_msg_handler(category, msg):
-            if category == u'respond_to':
-                if not self._dispatch_msg_handler('default_reply', msg):
-                    self._default_reply(msg)
+
+        if category == 'call_func':
+            func = msg[1]
+            try:
+                func(self._client)
+            except Exception as exp:
+                logger.exception(
+                    'Run at times handler failed when trying to run {0} with exception {1}'.format(
+                        func.__name__, exp
+                    )
+                )
+        else:
+            msg = msg[1]
+            if not self._dispatch_msg_handler(category, msg):
+                if category == u'respond_to':
+                    if not self._dispatch_msg_handler('default_reply', msg):
+                        self._default_reply(msg)
 
     def _dispatch_msg_handler(self, category, msg):
         responded = False
@@ -137,8 +149,6 @@ class MessageDispatcher(object):
         return msg
 
     def loop(self):
-        # once/second, check events
-        # run idle handlers whenever idle
         while True:
             events = self._client.rtm_read()
             for event in events:
@@ -154,33 +164,17 @@ class MessageDispatcher(object):
                     user = [event['user']]
                     self._client.parse_user_data(user)
 
-            # run idle handlers as long as we've been idle
-            for func in self._plugins.get_idle_plugins():
+            # check to see if there are any run_at_times handlers to be run
+            for func in self._plugins.get_run_at_times_plugins():
                 if not func:
                     continue
+                if not func.last_run:
+                    func.last_run = time.time()
+                else:
+                    if int(time.time()  - func.last_run) >= func.run_once_at:
+                        func.last_run = time.time()
+                        self._pool.add_task(('call_func', func))
 
-                # if actions are pending, don't do anything
-                if not self._pool.queue.empty():
-                    break
-
-                # if some action was taken, don't run the remaining handlers
-                if self._client.idle_time() < 1:
-                    break
-
-                try:
-                    func(self._client)
-                except:
-                    logger.exception(
-                        'idle handler failed with plugin "%s"',
-                        func.__name__)
-                    reply = u'[{}] I had a problem with idle handler\n'.format(
-                        func.__name__)
-                    tb = u'```\n{}\n```'.format(traceback.format_exc())
-                    # no channel, so only send errors to error user
-                    if self._errors_to:
-                        self._client.rtm_send_message(self._errors_to,
-                                                      '{}\n{}'.format(reply,
-                                                                      tb))
             time.sleep(1.0)
 
     def _default_reply(self, msg):

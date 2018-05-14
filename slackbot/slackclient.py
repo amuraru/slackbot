@@ -37,9 +37,6 @@ class SlackClient(object):
         else:
             self.webapi = slacker.Slacker(self.token, timeout=timeout)
 
-        # keep track of last action for idle handling
-        self._last_action = time.time()
-
         if connect:
             self.rtm_connect()
 
@@ -85,16 +82,12 @@ class SlackClient(object):
         self.users.update({u['id']: u for u in user_data})
 
     def send_to_websocket(self, data):
-        """Send (data) directly to the websocket.
-
-        Update last action for idle handling."""
+        """Send (data) directly to the websocket."""
         data = json.dumps(data)
         self.websocket.send(data)
-        self._last_action = time.time()
 
     def ping(self):
         self.send_to_websocket({'type': 'ping'})
-        self._last_action = time.time()
 
     def websocket_safe_read(self):
         """Returns data if available, otherwise ''. Newlines indicate multiple messages """
@@ -141,7 +134,6 @@ class SlackClient(object):
                                  channels=channel,
                                  filename=fname,
                                  initial_comment=comment)
-        self._last_action = time.time()
 
     def upload_content(self, channel, fname, content, comment):
         self.webapi.files.upload(None,
@@ -161,7 +153,6 @@ class SlackClient(object):
                 attachments=attachments,
                 as_user=as_user,
                 thread_ts=thread_ts)
-        self._last_action = time.time()
 
     def get_channel(self, channel_id):
         return Channel(self, self.channels[channel_id])
@@ -234,12 +225,6 @@ class SlackClient(object):
             name=emojiname,
             channel=channel,
             timestamp=timestamp)
-        self._last_action = time.time()
-
-    def idle_time(self):
-        """Return the time the client has been idle, i.e. the time since
-        it sent the last message to the server."""
-        return time.time() - self._last_action
 
 
 class SlackConnectionError(Exception):

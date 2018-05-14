@@ -116,14 +116,14 @@ def github(message):
 
 A chat bot is meaningless unless you can extend/customize it to fit your own use cases.
 
-To write a new plugin, simply create a function decorated by `slackbot.bot.respond_to`, `slackbot.bot.listen_to`, or `slackbot.bot.idle`:
+To write a new plugin, simply create a function decorated by `slackbot.bot.respond_to`, `slackbot.bot.listen_to`, `slackbot.bot.run_at_times`:
 
 - A function decorated with `respond_to` is called when a message matching the pattern is sent to the bot (direct message or @botname in a channel/group chat)
 - A function decorated with `listen_to` is called when a message matching the pattern is sent on a channel/group chat (not directly sent to the bot)
-- A function decorated with `idle` is called whenever a message has not been sent for the past second
+- A function decorated with `run_at_times` is called periodically at a given amount of seconds
 
 ```python
-from slackbot.bot import respond_to, listen_to, idle
+from slackbot.bot import respond_to, listen_to, run_at_times
 import re
 
 @respond_to('hi', re.IGNORECASE)
@@ -147,22 +147,10 @@ def help(message):
     # Start a thread on the original message
     message.reply("Here's a threaded reply", in_thread=True)
     
-last_bored = time.time()
-@idle
-def bored(client):
-    if time.time() - last_bored >= 30:
-        last_bored = time.time()
-        
-        # Messages can be sent to a channel
-        client.rtm_send_message('some_channel', "I'm bored!")
-        # Or directly to a user
-        client.rtm_send_message('some_user', "Hey, entertain me!")
-        
-        # If a name is ambiguous:
-        client.rtm_send_message(client.find_channel_by_name('ambiguous'), "To ambiguous the channel")
-        client.rtm_send_message(client.find_user_by_name('ambiguous'), "To ambiguous the user")
-        
-        # Attachments can be sent with `client.rtm_send_message(..., attachments=attachments)`.
+@run_at_times(run_once_at=60)
+def run_once_at_60s(client):
+    client.rtm_send_message('channel_name_or_username', 'This runs once at 60s!')
+
 ```
 
 To extract params from the message, you can use regular expression:
