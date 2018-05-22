@@ -194,7 +194,7 @@ class Driver(object):
         self.users = {u['name']: u['id'] for u in r['users']}
         self.testbot_userid = self.users[self.testbot_username]
 
-        self._websocket = websocket.create_connection(r['url'])
+        self._websocket = websocket.create_connection(r['url'], enable_multithread=True)
         self._websocket.sock.setblocking(0)
         _thread.start_new_thread(self._rtm_read_forever, tuple())
 
