@@ -70,7 +70,8 @@ class SlackClient(object):
             no_proxy = os.environ['no_proxy']
 
         self.websocket = create_connection(self.login_data['url'], http_proxy_host=proxy,
-                                           http_proxy_port=proxy_port, http_no_proxy=no_proxy)
+                                           http_proxy_port=proxy_port, http_no_proxy=no_proxy,
+                                           enable_multithread=True)
 
         self.websocket.sock.setblocking(0)
 
