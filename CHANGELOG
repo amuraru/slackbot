@@ -1,3 +1,6 @@
+#Internal build
+---
+
 Release Notes - Slackbot - Version 0.5.4
 --------------------------------------------
 This release contains the following new features:
@@ -13,6 +16,11 @@ This release contains the following new features:
 This release contains the following fixes:
 
   * [#176] Handle new line #176 (thanks, @suzuki4)
+Release Notes - Slackbot - Version 0.5.2.1
+--------------------------------------------
+This release contains the following new features:
+
+  * [#1] Bot initiated messages
 
 Release Notes - Slackbot - Version 0.5.2
 --------------------------------------------
