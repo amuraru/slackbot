@@ -1,27 +1,14 @@
-dist: trusty
 language: python
-python: 3.6
-cache:
-  directories:
-  - "$HOME/.cache/pip"
-  - "$TRAVIS_BUILD_DIR/.tox"
-before_install:
-- mkdir -p $HOME/opt/local/bin
-- export PATH=$HOME/opt/local/bin:$PATH
-- pushd /tmp/ && git clone https://github.com/rofl0r/proxychains-ng.git && cd proxychains-ng
-  && ./configure --prefix=$HOME/opt/local && make -j2 && make install && popd
-- pip install shadowsocks
-- cp scripts/slackbot-test-ctl $HOME/opt/local/bin
-- slackbot-test-ctl init
-- slackbot-test-ctl startproxy
-install: pip install tox
-script: tox
+python: 3.8
+script:
+- python setup.py sdist bdist_wheel
+- ls -l dist/
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: lins05_slackbot
+  user: "__token__"
   password:
-    secure: d+RIBeI8E66mLPZan5vgEYR5P4K+J8YfcAJR16MFVuoKkvMaCze+Ho5bFgUzN47wW+SzAjFixPI4fkB4Silk+7BCwMeQrBQq+CL9OYCZf2vPwl2K3QTScwVCreEF05u3V1x5lm3/UvzTAuz0knaXwrWelRm5DOVf3DZPjWEcXtA=
+    secure: W9Owb5TvemMqtRizX45NdCIQ1AJzPTSnKkj0vfQmENrZrPVNtv1HJAWvVgFtdsEQnVFyG5n3xq9QaQ9SjqbBunTwyt1F8FEERQAG7eGZcPLHdOAGWJQaeqeVKrRfWGt++1hd+Qciq0f4TCt5LMEykID4nLgDSYY2zb0Pk5d/OF7ZxaSvmGhGFp5OZiOc3V2mtdr05Iil6mcJbqG3kPqucDvPcZmGXFLA3fkesZC/lt/VzGuFZZCVjXN1Asr4DGIc86FdMZWi0QuIi3wew3oKCnR1WoYTiL9rCZp2+ei0798m+QRTKmziZDsTfzb3h4bEvedAJy3UoooZkykzkhg/ttViPMUvYhFEWrPFsg6JxM+X/rUYw0Hixk7CoY/caDLZvnFxaVyJyg+AlBm0CU+bA2yeP/RZ6Q3wcO9w4B4uBrsJRsjJ322NzbCvDDox0fmcRNntpSUn8aSCDUfZ8vU+nQCdEt5yQbLB/OsZANYy8OD9cky3MwqFUwAyJebAKRXbuQL7pYmBYf0oAlPC8D5qzchY37XmkXWcnFjHC3YsfXq3mIwjc6W6fUlrVZ5wbhmo7EzRzzLKSRjeAWxtXzK4xf5S1qReFsQ+EBcVYzp6esd7567SuNchDHm0KfkLeKsCsWakw/VVqCunlxBqEFwQFG+EZBkt92klTpG9wQl+DnU=
   on:
     tags: true
     repo: amuraru/slackbot
