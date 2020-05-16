@@ -127,20 +127,22 @@ class SlackClient(object):
             }
         self.send_to_websocket(message_json)
 
-    def upload_file(self, channel, fname, fpath, comment):
+    def upload_file(self, channel, fname, fpath, comment, thread_ts=None):
         channel = self._channelify(channel)
         fname = fname or to_utf8(os.path.basename(fpath))
         self.webapi.files.upload(fpath,
                                  channels=channel,
                                  filename=fname,
-                                 initial_comment=comment)
+                                 initial_comment=comment,
+                                 thread_ts=thread_ts)
 
-    def upload_content(self, channel, fname, content, comment):
+    def upload_content(self, channel, fname, content, comment, thread_ts=None):
         self.webapi.files.upload(None,
                                  channels=channel,
                                  content=content,
                                  filename=fname,
-                                 initial_comment=comment)
+                                 initial_comment=comment,
+                                 thread_ts=thread_ts)
 
     def send_message(self, channel, message, attachments=None, as_user=True, thread_ts=None):
         channel = self._channelify(channel)
