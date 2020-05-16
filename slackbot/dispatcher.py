@@ -10,6 +10,7 @@ from functools import wraps
 import six
 from slackbot.manager import PluginsManager
 from slackbot.utils import WorkerPool
+from slackbot.utils import to_utf8
 from slackbot import settings
 
 logger = logging.getLogger(__name__)
@@ -332,7 +333,7 @@ class Message(object):
         else:
             thread_ts = None
         self._client.upload_file(
-            self._body['id'],
+            self._body['channel'],
             to_utf8(fname),
             to_utf8(fpath),
             to_utf8(initial_comment),
