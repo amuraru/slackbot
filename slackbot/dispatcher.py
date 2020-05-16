@@ -319,7 +319,7 @@ class Message(object):
             timestamp=self._body['ts'])
 
     @unicode_compact
-    def reply_upload_file(self, text, in_thread=None):
+    def reply_upload_file(self, fname, fpath, initial_comment='', in_thread=None):
         """
             Upload the file and send it as a reply
             If the message was send in a thread, answer in a thread per default.
